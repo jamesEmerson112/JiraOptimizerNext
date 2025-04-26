@@ -341,6 +341,7 @@ function Optimized_Swim_Lanes() {
     localStorage.setItem('swimlane_subgoals', JSON.stringify(subgoalsByTask));
   }, [subgoalsByTask]);
 
+  // Move task between columns or groups
   const moveTask = (task: Task, newStatus: string, newGroupValue?: string) => {
     setTasks((prevTasks) =>
       prevTasks.map((t) =>
