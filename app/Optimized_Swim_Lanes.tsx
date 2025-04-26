@@ -38,21 +38,6 @@ const tasksData: Task[] = [
   { storyPoints: 5, title: 'Fix Bugs', status: 'done', category: 'Indiv Project', assignee: 'JV' },
 ];
 
-// Load from localStorage if available
-function loadTasksFromStorage(): Task[] {
-  try {
-    const data = localStorage.getItem('swimlane_tasks');
-    if (data) return JSON.parse(data);
-  } catch {}
-  return tasksData;
-}
-function loadSubgoalsFromStorage(): { [taskTitle: string]: Subgoal[] } {
-  try {
-    const data = localStorage.getItem('swimlane_subgoals');
-    if (data) return JSON.parse(data);
-  } catch {}
-  return {};
-}
 
 const allAssignees = ['RM', 'TD', 'Z', 'JV'];
 
