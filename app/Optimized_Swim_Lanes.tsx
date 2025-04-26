@@ -310,7 +310,7 @@ function LegendPopup({ onClose }: { onClose: () => void }) {
 }
 
 function Optimized_Swim_Lanes() {
-  const [tasks, setTasks] = useState<Task[]>(loadTasksFromStorage());
+  const [tasks, setTasks] = useState<Task[]>(tasksData);
   const [statuses, setStatuses] = useState<string[]>(['todo', 'doing', 'review', 'done']);
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [groupBy, setGroupBy] = useState<'Assignee' | 'Category'>('Assignee');
@@ -319,8 +319,24 @@ function Optimized_Swim_Lanes() {
   const [legendOpen, setLegendOpen] = useState(false);
 
   // New state for per-task subgoals and modal
-  const [subgoalsByTask, setSubgoalsByTask] = useState<{ [taskTitle: string]: Subgoal[] }>(loadSubgoalsFromStorage());
+  const [subgoalsByTask, setSubgoalsByTask] = useState<{ [taskTitle: string]: Subgoal[] }>({});
   const [openTaskTitle, setOpenTaskTitle] = useState<string | null>(null);
+
+  // Load tasks from localStorage on client only
+  useEffect(() => {
+    try {
+      const data = localStorage.getItem('swimlane_tasks');
+      if (data) setTasks(JSON.parse(data));
+    } catch {}
+  }, []);
+
+  // Load subgoals from localStorage on client only
+  useEffect(() => {
+    try {
+      const data = localStorage.getItem('swimlane_subgoals');
+      if (data) setSubgoalsByTask(JSON.parse(data));
+    } catch {}
+  }, []);
 
   // New Task Modal state
   const [newTaskModalOpen, setNewTaskModalOpen] = useState(false);
@@ -443,19 +459,6 @@ function Optimized_Swim_Lanes() {
   const filteredTasks = filterCategory
     ? tasks.filter((task) => task.category === filterCategory)
     : tasks;
-
-  const renderTasks = (status: string, groupKey: string, groupValue: string) => {
-    return filteredTasks
-      .map((task) => (
-        <TaskCard
-          key={task.title}
-          task={task}
-          moveTask={moveTask}
-          updateStoryPoints={updateStoryPoints}
-          onTaskCardClick={handleTaskClick}
-        />
-      ));
-  };
 
   const renderColumns = (groupValue: string) => {
     return (
