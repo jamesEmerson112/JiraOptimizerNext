@@ -570,8 +570,40 @@ function Optimized_Swim_Lanes() {
         </div>
         <div className="kanban-labels" style={{ display: 'flex', alignItems: 'center' }}>
           {statuses.map((status) => (
-            <div key={status} className="kanban-label">
+            <div key={status} className="kanban-label" style={{ display: 'flex', alignItems: 'center' }}>
               {status.toUpperCase()}
+              {['todo', 'doing', 'review', 'done'].includes(status)
+                ? null
+                : (
+                  <button
+                    style={{
+                      marginLeft: 4,
+                      background: 'none',
+                      border: 'none',
+                      color: '#d00',
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      lineHeight: 1,
+                    }}
+                    title="Remove column"
+                    onClick={() => {
+                      if (window.confirm(`Remove column "${status}"? Tasks in this column will be moved to "todo".`)) {
+                        setStatuses(prev => prev.filter(s => s !== status));
+                        setTasks(prev =>
+                          prev.map(task =>
+                            task.status === status
+                              ? { ...task, status: 'todo' }
+                              : task
+                          )
+                        );
+                      }
+                    }}
+                  >
+                    ×
+                  </button>
+                )
+              }
             </div>
           ))}
           <div
