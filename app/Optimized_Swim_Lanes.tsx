@@ -255,7 +255,7 @@ function LegendPopup({ onClose }: { onClose: () => void }) {
     assignee: 'RM',
   });
 
-  // Dummy functions for moveTask and onTaskCardClick
+  // Dummy functions for TaskCard in LegendPopup
   const moveTask = () => {};
   const onTaskCardClick = () => {};
 
